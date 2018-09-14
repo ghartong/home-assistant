@@ -1,0 +1,14 @@
+back_door_battery_low:
+  name: Back door battery is low
+  done_message: Back door battery replaced
+  entity_id: binary_sensor.back_door_battery_low
+  repeat: 120
+  notifiers:
+    - dawghass_slack
+shed_door_battery_low:
+  name: Shed door battery is low
+  done_message: Shed door battery replaced
+  entity_id: binary_sensor.shed_door_battery_low
+  repeat: 120
+  notifiers:
+    - dawghass_slack

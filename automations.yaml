@@ -1,0 +1,16 @@
+- alias: 'Back Door Opens When I Am Home At Night'
+  # if back door opens
+  trigger:
+    platform: state
+    entity_id: sensor.hank_hkzwdws01_doorwindow_sensor_access_control
+    to: '22'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: sun.sun
+        state: "below_horizon"
+  action:
+    service: notify.dawghass_slack
+    data_template:
+      message: 'Back door was just opened.' 

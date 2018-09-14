@@ -1,0 +1,33 @@
+###################################
+#  VIEWS
+###################################
+weather_v:
+  name: Weather Shit
+  icon: mdi:weather-sunny
+  view: yes
+  entities:
+    - weather.barberton_weather
+
+battery_v:
+  name: 'Battery Status'
+  view: yes
+  icon: mdi:battery
+  entities:
+    - group.batteries
+
+automation_v:
+  name: 'Automations and Scripts'
+  view: yes
+  icon: mdi:robot
+  entities: 
+    - group.all_automations
+
+####################################
+#  GROUPS
+####################################
+batteries:
+  name: 'Batteries'
+  view: no
+  entities:
+    - sensor.back_door_sensor_battery
+    - sensor.shed_door_sensor_battery

@@ -1,0 +1,9 @@
+- name: Work
+  latitude: 41.139516
+  longitude: -81.615066
+  icon: mdi:diamond
+
+- name: Home
+  latitude: 41.0163588
+  longitude: -81.5921053
+  icon: mdi:home

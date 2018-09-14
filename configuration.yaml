@@ -1,0 +1,185 @@
+homeassistant:
+  name: Home
+  latitude: 41.0164518
+  longitude: -81.5946041
+  elevation: 0
+  unit_system: imperial
+  time_zone: America/New_York
+  # Customization file
+  customize: !include customize.yaml
+
+# Show links to resources in log and frontend
+#introduction:
+
+# Enables the frontend
+frontend:
+  extra_html_url:
+    - /local/custom_ui/custom-weather-card.html
+  extra_html_url_es5:
+    - /local/custom_ui/custom-weather-card.html
+  themes: !include themes.yaml
+
+weather:
+  - platform: yweather
+    woeid: 2359120
+    name: Barberton Weather
+
+# Enables configuration UI
+config:
+
+# Uncomment this if you are using SSL/TLS, running in Docker container, etc.
+# http:
+#   base_url: example.duckdns.org:8123
+
+# Checks for available updates
+# Note: This component will send some information about your system to
+# the developers to assist with development of Home Assistant.
+# For more information, please see:
+# https://home-assistant.io/blog/2016/10/25/explaining-the-updater/
+updater:
+  # Optional, allows Home Assistant developers to focus on popular components.
+  # include_used_components: true
+
+discovery:
+conversation:
+history:
+logbook:
+map:
+sun:
+tts:
+  - platform: google
+cloud:
+
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+alert: !include alerts.yaml
+zone: !include zones.yaml
+
+################################
+#  ZWAVE
+################################
+# Aeotec ZW090 Z-Stick
+zwave:
+  usb_path: /dev/cuaU0
+  config_path: /srv/homeassistant/lib/python3.5/site-packages/python_openzwave/ozw_config
+
+################################
+#  Zoneminder
+################################
+zoneminder:
+  host: 192.168.1.120
+  path: /
+  path_zms: /cgi-bin/nph-zms/
+  username: !secret zm_username
+  password: !secret zm_password
+camera:
+  - platform: zoneminder
+
+################################
+# Binary Sensors
+################################
+binary_sensor:
+  - platform: template
+    sensors:
+      back_door:
+        friendly_name: "Back door sensor"
+        device_class: door
+        value_template: "{{  is_state('sensor.hank_hkzwdws01_doorwindow_sensor_access_control', '22') }}"
+      back_door_tamper:
+        friendly_name: "Back door sensor tamper"
+        device_class: problem
+        value_template: "{{  is_state('sensor.hank_hkzwdws01_doorwindow_sensor_burglar', '3') }}"
+  - platform: template
+    sensors:
+      shed_door:
+        friendly_name: "Shed door sensor"
+        device_class: door
+        value_template: "{{ is_state('sensor.hank_hkzwdws01_doorwindow_sensor_access_control_2', '22') }}"
+      shed_door_tamper:
+        friendly_name: "Shed door sensor tamper"
+        device_class: problem
+        value_template: "{{  is_state('sensor.hank_hkzwdws01_doorwindow_sensor_burglar_2', '3') }}"
+  - platform: template
+    sensors:
+      back_door_battery_low:
+        value_template: '{{  states.zwave.hank_hkzwdws01_doorwindow_sensor.attributes.battery_level < 15 }}'
+        friendly_name: 'Back door sensor battery is low'
+  - platform: template
+    sensors:
+      shed_door_battery_low:
+        value_template: '{{  states.zwave.hank_hkzwdws01_doorwindow_sensor_2.attributes.battery_level < 15 }}'
+        friendly_name: 'Shed door sensor battery is low'
+
+################################
+#  Sensors
+################################
+sensor:
+  - platform: template
+    sensors:
+      back_door_sensor_battery:
+        friendly_name: "Back door sensor battery"
+        value_template: '{{ states.zwave.hank_hkzwdws01_doorwindow_sensor.attributes.battery_level|default(0) }}'
+        icon_template: >
+          {% set battery_level = states.zwave.hank_hkzwdws01_doorwindow_sensor.attributes.battery_level | default(0) | int %}
+          {% set battery_round = (battery_level / 10) | int * 10 %}
+          {% if battery_round >= 100 %}
+            mdi:battery
+          {% elif battery_round > 0 %}
+            mdi:battery-{{ battery_round }}
+          {% else %}
+            mdi:battery-alert
+          {% endif %}
+  - platform: template
+    sensors:
+      shed_door_sensor_battery:
+        friendly_name: "Shed door sensor battery"
+        value_template: '{{ states.zwave.hank_hkzwdws01_doorwindow_sensor_2.attributes.battery_level|default(0) }}'
+        icon_template: >
+          {% set battery_level = states.zwave.hank_hkzwdws01_doorwindow_sensor_2.attributes.battery_level | default(0) | int %}
+          {% set battery_round = (battery_level / 10) | int * 10 %}
+          {% if battery_round >= 100 %}
+            mdi:battery
+          {% elif battery_round > 0 %}
+            mdi:battery-{{ battery_round }}
+          {% else %}
+            mdi:battery-alert
+          {% endif %}
+
+########################################
+#  Notifications - services and intents
+########################################
+notify:
+  - name: dawghass_slack
+    platform: slack
+    api_key: !secret slack_api
+    default_channel: '#dawghouse'
+
+hangouts:
+  intents:
+    BedroomLights:
+      sentences:
+        - Turn off bedroom lights
+    Botbots:
+      sentences:
+        - How smart are you
+
+intent_script:
+  Botbots:
+    speech:
+      text: I know {{states.hangouts.conversations.state }} conversations
+  BedroomLights:
+    speech:
+      text: You got it boss
+    action:
+       service: light.turn_off
+       entity_id: light.bedroom
+
+####################################
+#  Device Tracker
+####################################
+device_tracker:
+  - platform: google_maps
+    username: !secret gmail_user
+    password: !secret gmail_pw
+    max_gps_accuracy: 600
