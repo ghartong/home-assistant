@@ -11,6 +11,10 @@ homeassistant:
 # Show links to resources in log and frontend
 #introduction:
 
+duckdns:
+  domain: !secret duck_domain
+  access_token: !secret duck_token
+
 # Enables the frontend
 frontend:
   extra_html_url:
@@ -27,9 +31,14 @@ weather:
 # Enables configuration UI
 config:
 
-# Uncomment this if you are using SSL/TLS, running in Docker container, etc.
-# http:
-#   base_url: example.duckdns.org:8123
+http:
+  api_password: !secret api_password
+  ssl_certificate: !secret ssl_certificate
+  ssl_key: !secret ssl_key
+  base_url: !secret base_url
+
+shell_command:
+  renew_ssl: sudo certbot renew
 
 # Checks for available updates
 # Note: This component will send some information about your system to
@@ -110,11 +119,28 @@ binary_sensor:
       shed_door_battery_low:
         value_template: '{{  states.zwave.hank_hkzwdws01_doorwindow_sensor_2.attributes.battery_level < 15 }}'
         friendly_name: 'Shed door sensor battery is low'
-
+  - platform: trend
+    sensors:
+      alert_zm_motion:
+        # 3 events/minute
+        entity_id: sensor.zm_motion
+        sample_duration: 600
+        min_gradient: 0.005
+        device_class: moving
+        max_samples: 10
 ################################
 #  Sensors
 ################################
 sensor:
+  - platform: zoneminder
+    include_archived: false
+  - platform: template
+    sensors:
+      zm_motion:
+        friendly_name: 'ZM Motion'
+        unit_of_measurement: 'Events'
+        value_template: "{{ ((states.sensor.outdoor01sv3c_events.state | int) + (states.sensor.outdoor02_sv3c_events.state | int) + (states.sensor.frontroomamc_events.state | 
+int)) | round(2) }}"
   - platform: template
     sensors:
       back_door_sensor_battery:
@@ -145,6 +171,11 @@ sensor:
           {% else %}
             mdi:battery-alert
           {% endif %}
+  - platform: command_line
+    name: SSL cert expiry
+    unit_of_measurement: days
+    scan_interval: 10800
+    command: !secret ssl_cert_check
 
 ########################################
 #  Notifications - services and intents

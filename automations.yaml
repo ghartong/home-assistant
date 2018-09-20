@@ -1,3 +1,33 @@
+- alias: 'SSL expiry notification'
+  trigger:
+    platform: numeric_state
+    entity_id: sensor.ssl_cert_expiry
+    below: 21
+  action:
+    service:  notify.dawghass_slack
+    data_template:
+      message: "Warning -- SSL certificate expires in 21 days and has not been automaticlly renewed"
+- alias: 'Auto renew SSL Cert'
+  trigger:
+    platform: numeric_state
+    entity_id: sensor.ssl_cert_expiry
+    below: 29
+  action:
+    service: shell_command.renew_ssl
+- alias: 'ZM Alarm'
+  trigger:
+    platform: state
+    entity_id: binary_sensor.alert_zm_motion
+    to: 'on'
+  condition:
+    - condition: template
+      value_template: "{{ (states.binary_sensor.alert_zm_motion.attributes['gradient'] | float) < 1.0 }}"
+    - condition: template
+      value_template: "{{ (as_timestamp(now()) - (as_timestamp(states.automation.zm_alarm.attributes['last_triggered']) | int)) > 600 }}"
+  action:
+    service: notify.dawghass_slack
+    data_template:
+      message: 'ZM Motion Detected'
 - alias: 'Back Door Opens When I Am Home At Night'
   # if back door opens
   trigger:
@@ -10,7 +40,54 @@
       - condition: state
         entity_id: sun.sun
         state: "below_horizon"
+      - condition: state
+        entity_id: device_tracker.google_maps_107387625298413463868
+        state: "home"
   action:
     service: notify.dawghass_slack
     data_template:
       message: 'Back door was just opened.' 
+- alias: 'Back Door Opens When I Am Away'
+  # if back door opens
+  trigger:
+    platform: state
+    entity_id: sensor.hank_hkzwdws01_doorwindow_sensor_access_control
+    to: '22'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: device_tracker.google_maps_107387625298413463868
+        state: "away"
+  action:
+    service: notify.dawghass_slack
+    data_template:
+      message: 'Back door was just opened.'
+
+- alias: 'Motion detected in front room'
+  trigger:
+    platform: state
+    entity_id: camera.frontroomamc
+    to: 'recording'
+  action:
+    service: notify.dawghass_slack
+    data_template:
+      message: 'Motion detected in front room'
+- alias: 'Motion detected on front porch'
+  trigger:
+    platform: state
+    entity_id: camera.outdoor01sv3c
+    to: 'recording'
+  action:
+    service: notify.dawghass_slack
+    data_template:
+      message: 'Motion detected on front porch'
+- alias: 'Motion detected in driveway'
+  trigger:
+    platform: state
+    entity_id: camera.outdoor02sv3c
+    to: 'recording'
+  action:
+    service: notify.dawghass_slack
+    data_template:
+      message: 'Motion detected in driveway'

@@ -1,6 +1,21 @@
 ###################################
 #  VIEWS
 ###################################
+cams_v:
+  name: Smile for the Cameras
+  icon: mdi:camera
+  view: yes
+  entities:
+    - sensor.frontroomamc_events
+    - sensor.frontroomamc_status
+    - sensor.outdoor01sv3c_events
+    - sensor.outdoor01sv3c_status
+    - sensor.outdoor02_sv3c_events
+    - sensor.outdoor02_sv3c_status
+    - sensor.zm_motion
+    - camera.frontroomamc
+    - camera.outdoor01sv3c
+    - camera.outdoor02_sv3c
 weather_v:
   name: Weather Shit
   icon: mdi:weather-sunny
