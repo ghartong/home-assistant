@@ -227,7 +227,4 @@ google_assistant:
     - switch
     - light
     - group
-  entity_config:
-    light.front_room:
-      expose: false
-      room: front room
+    - script

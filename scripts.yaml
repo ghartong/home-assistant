@@ -1,0 +1,6 @@
+'1540566465341':
+  alias: guest room script
+  sequence:
+  - data:
+      entity_id: light.front_room
+    service: light.toggle
