@@ -19,6 +19,7 @@ duckdns:
 frontend:
   extra_html_url:
     - /local/custom_ui/custom-weather-card.html
+    - /local/custom_ui/state-card-floorplan.html
   extra_html_url_es5:
     - /local/custom_ui/custom-weather-card.html
   themes: !include themes.yaml
@@ -64,7 +65,29 @@ automation: !include automations.yaml
 script: !include scripts.yaml
 alert: !include alerts.yaml
 zone: !include zones.yaml
-
+################################
+# MQTT
+################################
+mqtt:
+  password: hello
+################################
+# CUSTOM PANEL
+################################
+panel_custom:
+  # this is the name of the web component that will be defined by the panel
+  - name: react-panel
+    sidebar_title: React
+    sidebar_icon: mdi:react
+    # this is the url that will load the panel
+    url_path: react-panel
+    # location of panel is hosted during development
+    js_url: /local/my-panel/main.js
+    #js_url: http://192.168.1.8:8080/main.js
+    # we want to load an iframe 
+    embed_iframe: true
+    #this wil be availabel as prop 'panel.config'
+    config:
+      name: World
 ################################
 #  ZWAVE
 ################################
@@ -89,6 +112,9 @@ camera:
 # Binary Sensors
 ################################
 binary_sensor:
+  - platform: mqtt
+    state_topic: dummy/floorplan/sensor
+    name: Floorplan
   - platform: template
     sensors:
       back_door:
@@ -176,7 +202,14 @@ int)) | round(2) }}"
     unit_of_measurement: days
     scan_interval: 10800
     command: !secret ssl_cert_check
-
+########################################
+# Input Booleans
+########################################
+input_boolean:
+  is_bedtime:
+    name: Bedtime Protocol Initiated
+    initial: off
+    icon: mdi:hotel
 ########################################
 #  Notifications - services and intents
 ########################################

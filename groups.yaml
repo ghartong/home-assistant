@@ -1,21 +1,46 @@
 ###################################
 #  VIEWS
 ###################################
+lights_v:
+  name: Lights
+  icon: mdi:lightbulb
+  view: yes
+  entities:
+    - light.front_room
+    - light.guest_room
+    - light.breezeway
+    - light.bedroom
+floorplan_v:
+  name: Floorplans
+  view: yes
+  entities:
+    - binary_sensor.floorplan
+bedroom_v:
+  name: Bedroom
+  icon: mdi:hotel
+  view: yes
+  entities:
+    - group.bedroom_g
+rooms_v:
+  name: Rooms
+  icon: mdi:home-outline
+  view: yes
+  entities:
+    - group.breezeway_lights
+    - group.front_room_lights
+    - group.guest_room_lights
+    - group.bedroom_g
+    - group.mancave_g
 cams_v:
   name: Smile for the Cameras
   icon: mdi:camera
   view: yes
   entities:
-    - sensor.frontroomamc_events
-    - sensor.frontroomamc_status
-    - sensor.outdoor01sv3c_events
-    - sensor.outdoor01sv3c_status
-    - sensor.outdoor02_sv3c_events
-    - sensor.outdoor02_sv3c_status
-    - sensor.zm_motion
-    - camera.frontroomamc
-    - camera.outdoor01sv3c
-    - camera.outdoor02_sv3c
+    - group.home_status
+    - group.cam_g_front_room
+    - group.cam_g_dining_room
+    - group.cam_g_outdoor_1
+    - group.cam_g_outdoor_2
 weather_v:
   name: Weather Shit
   icon: mdi:weather-sunny
@@ -36,6 +61,7 @@ automation_v:
   icon: mdi:robot
   entities: 
     - group.all_automations
+    - group.all_scripts
 
 ####################################
 #  GROUPS
@@ -46,3 +72,73 @@ batteries:
   entities:
     - sensor.back_door_sensor_battery
     - sensor.shed_door_sensor_battery
+cam_g_front_room:
+  name: 'Front Room'
+  view: no
+  entities: 
+    - sensor.frontroomamc_events
+    - sensor.frontroomamc_status
+    - camera.frontroomamc
+cam_g_dining_room:
+  name: 'Dining Room'
+  view: no
+  entities:
+    - sensor.diningamc_events
+    - sensor.diningamc_status
+    - camera.diningamc
+cam_g_outdoor_1:
+  name: 'Front Door'
+  view: no
+  entities:
+    - sensor.outdoor01sv3c_events
+    - sensor.outdoor01sv3c_status
+    - camera.outdoor01sv3c
+cam_g_outdoor_2:
+  name: 'Side Door'
+  view: no
+  entities:
+    - sensor.outdoor02sv3c_events
+    - sensor.outdoor02sv3c_status
+    - camera.outdoor02sv3c
+
+home_status:
+  name: 'Home Status'
+  view: no
+  entities:
+    - device_tracker.google_maps_107387625298413463868
+    - input_boolean.is_bedtime
+    - binary_sensor.back_door
+    - binary_sensor.back_door_tamper
+    - binary_sensor.back_door_battery_low
+    - binary_sensor.shed_door
+    - binary_sensor.shed_door_tamper
+    - binary_sensor.shed_door_battery_low
+    - sensor.zm_motion
+
+front_room_lights:
+  name: 'Front Room'
+  view: no
+  entities:
+    - light.front_room
+guest_room_lights:
+  name: 'Guest Room'
+  view: no
+  entities:
+    - light.guest_room
+bedroom_g:
+  name: 'Bedroom'
+  view: no
+  entities:
+    - light.bedroom
+    - media_player.bedroom
+breezeway_lights:
+  name: 'Breezeway'
+  view: no
+  entities:
+    - light.breezeway
+mancave_g:
+  name: 'Man Cave'
+  view: no
+  entities:
+    - media_player.chromecastaudio6243
+    - media_player.roku_1gh35f027012

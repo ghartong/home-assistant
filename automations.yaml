@@ -1,3 +1,17 @@
+- alias: 'Bedtime Protocol Off'
+  trigger:
+    platform: sun
+    event: sunrise
+  action:
+    service: input_boolean.turn_off
+    entity_id: input_boolean.is_bedtime
+- alias: 'Bedtime Protocol On'
+  trigger:
+    platform: state
+    entity_id: input_boolean.is_bedtime
+    to: 'on'
+  action:
+    service: script.1540566465341
 - alias: 'SSL expiry notification'
   trigger:
     platform: numeric_state
