@@ -10,3 +10,6 @@
   - data:
       entity_id: media_player.home_group
     service: media_player.media_stop
+  - data:
+      entity_id: switch.hank_hkzwso01_smart_plug_switch
+    service: switch.turn_off

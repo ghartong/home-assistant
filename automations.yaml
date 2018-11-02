@@ -1,3 +1,19 @@
+- alias: 'Turn Bar Light On'
+  trigger:
+    platform: state
+    entity_id: input_boolean.is_bar_light_on
+    to: 'on'
+  action:
+    service: shell_command.bar_light_on_curl
+    entity_id: input_boolean.is_bar_light_on
+- alias: 'Turn Bar Light Off'
+  trigger:
+    platform: state
+    entity_id: input_boolean.is_bar_light_on
+    to: 'off'
+  action:
+    service: shell_command.bar_light_off_curl
+    entity_id: input_boolean.is_bar_light_on
 - alias: 'Bedtime Protocol Off'
   trigger:
     platform: sun

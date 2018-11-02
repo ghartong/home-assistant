@@ -10,51 +10,107 @@ lights_v:
     - light.guest_room
     - light.breezeway
     - light.bedroom
+    - light.ge_garage_1
+    - light.ge_garage_2
+    - input_boolean.is_bar_light_on
+    - switch.hank_hkzwso01_smart_plug_switch
+cams_v:
+  name: Smile for the Cameras
+  icon: mdi:camera
+  view: yes
+  entities:
+    - group.cam_g_front_room
+    - group.cam_g_dining_room
+    - group.cam_g_outdoor_1
+    - group.cam_g_outdoor_2
+    - group.cam_g_outdoor_3
+    - group.cam_g_outdoor_4
+    - group.cam_g_breezeway
 floorplan_v:
   name: Floorplans
   view: yes
   entities:
     - binary_sensor.floorplan
+outdoor_v:
+  name: Outsides
+  icon: mdi:flower-tulip
+  view: yes
+  entities:
+    - switch.hank_hkzwso01_smart_plug_switch
+    - group.cam_g_outdoor_1
+    - group.cam_g_outdoor_2
+    - group.cam_g_outdoor_3
+    - group.cam_g_outdoor_4
+basement_v:
+  name: Man Cave
+  icon: mdi:bullseye-arrow
+  view: yes
+  entities:
+    - group.mancave_g
+    - media_player.home_group
 bedroom_v:
   name: Bedroom
   icon: mdi:hotel
   view: yes
   entities:
     - group.bedroom_g
+    - media_player.home_group
+breezeway_v:
+  name: Breezeway
+  icon: mdi:dumbbell
+  view: yes
+  entities:
+    - group.breezeway_g
+    - media_player.home_group
+diningroom_v:
+  name: Dining Room
+  icon: mdi:glass-wine
+  view: yes
+  entities:
+    - group.dining_room_g
+    - media_player.home_group
+frontroom_v:
+  name: Front Room
+  icon: mdi:sofa
+  view: yes
+  entities:
+    - group.front_room_g
+    - media_player.home_group
+garage_v:
+  name: Garage
+  icon: mdi:car-convertible
+  view: yes
+  entities:
+    - group.garage_g
+    - media_player.home_group
+guest_room_v:
+  name: Guest Room
+  icon: mdi:bed-empty
+  view: yes
+  entities:
+    - group.guest_room_g                                                                                
+    - media_player.home_group
+kitchen_v:
+  name: Kitchen
+  icon: mdi:food
+  view: yes
+  entities:
+    - group.kitchen_g
+    - media_player.home_group
 rooms_v:
-  name: Rooms
+  name: Other Rooms
   icon: mdi:home-outline
   view: yes
   entities:
-    - group.breezeway_lights
-    - group.front_room_lights
-    - group.guest_room_lights
-    - group.bedroom_g
-    - group.mancave_g
-cams_v:
-  name: Smile for the Cameras
-  icon: mdi:camera
-  view: yes
-  entities:
-    - group.home_status
-    - group.cam_g_front_room
-    - group.cam_g_dining_room
-    - group.cam_g_outdoor_1
-    - group.cam_g_outdoor_2
+   - group.home_status
+   - group.batteries
+   - media_player.home_group
 weather_v:
   name: Weather Shit
   icon: mdi:weather-sunny
   view: yes
   entities:
     - weather.barberton_weather
-
-battery_v:
-  name: 'Battery Status'
-  view: yes
-  icon: mdi:battery
-  entities:
-    - group.batteries
-
 automation_v:
   name: 'Automations and Scripts'
   view: yes
@@ -72,6 +128,14 @@ batteries:
   entities:
     - sensor.back_door_sensor_battery
     - sensor.shed_door_sensor_battery
+cam_g_breezeway:
+  name: "Breezeway"
+  view: no
+  entities: 
+    - sensor.breezewaywyze_events
+    - sensor.breezewaywyze_status
+    - camera.breezewaywyze
+    - camera.breezewayha
 cam_g_front_room:
   name: 'Front Room'
   view: no
@@ -100,7 +164,20 @@ cam_g_outdoor_2:
     - sensor.outdoor02sv3c_events
     - sensor.outdoor02sv3c_status
     - camera.outdoor02sv3c
-
+cam_g_outdoor_3:
+  name: 'Fire Pit'
+  view: no
+  entities:
+    - sensor.backyard01amc_events
+    - sensor.backyard01amc_status
+    - camera.backyard01amc
+cam_g_outdoor_4:
+  name: 'Deck'
+  view: no
+  entities:
+    - sensor.backyard02amc_events
+    - sensor.backyard02amc_status
+    - camera.backyard02amc
 home_status:
   name: 'Home Status'
   view: no
@@ -115,12 +192,15 @@ home_status:
     - binary_sensor.shed_door_battery_low
     - sensor.zm_motion
 
-front_room_lights:
+front_room_g:
   name: 'Front Room'
   view: no
   entities:
     - light.front_room
-guest_room_lights:
+    - sensor.frontroomamc_events
+    - sensor.frontroomamc_status
+    - camera.frontroomamc
+guest_room_g:
   name: 'Guest Room'
   view: no
   entities:
@@ -131,14 +211,38 @@ bedroom_g:
   entities:
     - light.bedroom
     - media_player.bedroom
-breezeway_lights:
+    - media_player.insignia_nscspgasp2127 #clock
+breezeway_g:
   name: 'Breezeway'
   view: no
   entities:
     - light.breezeway
+    - sensor.breezewaywyze_events
+    - sensor.breezewaywyze_status
+    - camera.breezewaywyze
+    - media_player.insignia_nscspgasp2981
 mancave_g:
   name: 'Man Cave'
   view: no
   entities:
+    - input_boolean.is_bar_light_on
     - media_player.chromecastaudio6243
     - media_player.roku_1gh35f027012
+garage_g:
+  name: 'Garage'
+  view: no
+  entities:
+    - light.ge_garage_1
+    - light.ge_garage_2
+kitchen_g:
+  name: 'Kitchen'
+  view: no
+  entities:
+    - media_player.googlehomehub0788
+dining_room_g:
+  name: 'Dining Room'
+  view: no
+  entities:
+    - sensor.diningamc_events
+    - sensor.diningamc_status
+    - camera.diningamc

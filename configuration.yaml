@@ -38,9 +38,6 @@ http:
   ssl_key: !secret ssl_key
   base_url: !secret base_url
 
-shell_command:
-  renew_ssl: sudo certbot renew
-
 # Checks for available updates
 # Note: This component will send some information about your system to
 # the developers to assist with development of Home Assistant.
@@ -52,8 +49,8 @@ updater:
 
 discovery:
 conversation:
-history:
-logbook:
+#history:
+#logbook:
 map:
 sun:
 tts:
@@ -66,10 +63,17 @@ script: !include scripts.yaml
 alert: !include alerts.yaml
 zone: !include zones.yaml
 ################################
+# SHELL COMMANDS
+################################
+shell_command:
+  bar_light_on_curl: !secret bar_light_on_curl
+  bar_light_off_curl: !secret bar_light_off_curl
+  renew_ssl: sudo certbot renew
+################################
 # MQTT
 ################################
 mqtt:
-  password: hello
+  password: !secret mqtt_password
 ################################
 # CUSTOM PANEL
 ################################
@@ -107,7 +111,9 @@ zoneminder:
   password: !secret zm_password
 camera:
   - platform: zoneminder
-
+  - platform: mjpeg
+    name: BreezewayHA
+    mjpeg_url: !secret wyze_1_url
 ################################
 # Binary Sensors
 ################################
@@ -210,6 +216,10 @@ input_boolean:
     name: Bedtime Protocol Initiated
     initial: off
     icon: mdi:hotel
+  is_bar_light_on:
+    name: Bar Light
+    initial: off
+    icon: mdi:lightbulb
 ########################################
 #  Notifications - services and intents
 ########################################
