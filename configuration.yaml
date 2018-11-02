@@ -115,6 +115,13 @@ camera:
     name: BreezewayHA
     mjpeg_url: !secret wyze_1_url
 ################################
+# SWITCH
+################################
+switch:
+  - platform: zoneminder
+    command_on: Mocord
+    command_off: Nodect
+################################
 # Binary Sensors
 ################################
 binary_sensor:
@@ -164,6 +171,14 @@ binary_sensor:
 #  Sensors
 ################################
 sensor:
+  - platform: systemmonitor
+    resources:
+      - type: disk_use_percent
+        arg: /home
+      - type: memory_use_percent
+      - type: load_5m
+      - type: load_15m
+      - type: processor_use
   - platform: zoneminder
     include_archived: false
   - platform: template

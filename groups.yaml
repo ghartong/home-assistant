@@ -36,11 +36,18 @@ outdoor_v:
   icon: mdi:flower-tulip
   view: yes
   entities:
+    - sensor.back_door_sensor_battery
+    - sensor.shed_door_sensor_battery
+    - binary_sensor.back_door
+    - binary_sensor.back_door_tamper
+    - binary_sensor.shed_door
+    - binary_sensor.shed_door_tamper
     - switch.hank_hkzwso01_smart_plug_switch
     - group.cam_g_outdoor_1
     - group.cam_g_outdoor_2
     - group.cam_g_outdoor_3
     - group.cam_g_outdoor_4
+    - weather.barberton_weather
 basement_v:
   name: Man Cave
   icon: mdi:bullseye-arrow
@@ -118,7 +125,12 @@ automation_v:
   entities: 
     - group.all_automations
     - group.all_scripts
-
+server_v:
+  name: 'Nuts and Bolts'
+  view: yes
+  icon: mdi:server-network
+  entities:
+    - group.server_g
 ####################################
 #  GROUPS
 ####################################
@@ -134,6 +146,7 @@ cam_g_breezeway:
   entities: 
     - sensor.breezewaywyze_events
     - sensor.breezewaywyze_status
+    - switch.breezewaywyze_state
     - camera.breezewaywyze
     - camera.breezewayha
 cam_g_front_room:
@@ -142,6 +155,7 @@ cam_g_front_room:
   entities: 
     - sensor.frontroomamc_events
     - sensor.frontroomamc_status
+    - switch.frontroomamc_state
     - camera.frontroomamc
 cam_g_dining_room:
   name: 'Dining Room'
@@ -149,6 +163,7 @@ cam_g_dining_room:
   entities:
     - sensor.diningamc_events
     - sensor.diningamc_status
+    - switch.diningamc_state
     - camera.diningamc
 cam_g_outdoor_1:
   name: 'Front Door'
@@ -156,6 +171,7 @@ cam_g_outdoor_1:
   entities:
     - sensor.outdoor01sv3c_events
     - sensor.outdoor01sv3c_status
+    - switch.outdoor01sv3c_state
     - camera.outdoor01sv3c
 cam_g_outdoor_2:
   name: 'Side Door'
@@ -163,6 +179,7 @@ cam_g_outdoor_2:
   entities:
     - sensor.outdoor02sv3c_events
     - sensor.outdoor02sv3c_status
+    - switch.outdoor02sv3c_state
     - camera.outdoor02sv3c
 cam_g_outdoor_3:
   name: 'Fire Pit'
@@ -170,6 +187,7 @@ cam_g_outdoor_3:
   entities:
     - sensor.backyard01amc_events
     - sensor.backyard01amc_status
+    - switch.backyard01amc_state
     - camera.backyard01amc
 cam_g_outdoor_4:
   name: 'Deck'
@@ -177,6 +195,7 @@ cam_g_outdoor_4:
   entities:
     - sensor.backyard02amc_events
     - sensor.backyard02amc_status
+    - switch.backyard02amc_state
     - camera.backyard02amc
 home_status:
   name: 'Home Status'
@@ -195,10 +214,12 @@ home_status:
 front_room_g:
   name: 'Front Room'
   view: no
+  control: hidden
   entities:
     - light.front_room
     - sensor.frontroomamc_events
     - sensor.frontroomamc_status
+    - switch.frontroomamc_state
     - camera.frontroomamc
 guest_room_g:
   name: 'Guest Room'
@@ -208,17 +229,22 @@ guest_room_g:
 bedroom_g:
   name: 'Bedroom'
   view: no
+  control: hidden
   entities:
     - light.bedroom
+    - input_boolean.is_bedtime
     - media_player.bedroom
+    - media_player.bedroom_2
     - media_player.insignia_nscspgasp2127 #clock
 breezeway_g:
   name: 'Breezeway'
   view: no
+  control: hidden
   entities:
     - light.breezeway
     - sensor.breezewaywyze_events
     - sensor.breezewaywyze_status
+    - switch.breezewaywyze_state
     - camera.breezewaywyze
     - media_player.insignia_nscspgasp2981
 mancave_g:
@@ -231,6 +257,7 @@ mancave_g:
 garage_g:
   name: 'Garage'
   view: no
+  control: hidden
   entities:
     - light.ge_garage_1
     - light.ge_garage_2
@@ -245,4 +272,14 @@ dining_room_g:
   entities:
     - sensor.diningamc_events
     - sensor.diningamc_status
+    - switch.diningamc_state
     - camera.diningamc
+server_g:
+  name: 'Server Stats'
+  view: no
+  entities:
+    - sensor.disk_use_percent_home
+    - sensor.load_5m
+    - sensor.load_15m
+    - sensor.memory_use_percent
+    - sensor.processor_use
